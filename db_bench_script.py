@@ -74,6 +74,7 @@ def execute_adjust_param(n):
             " --benchmarks=fillrandom --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
     for i in range(n):
         # collect throughput and corresponding parameters
+        print("The {}-th adjust".format(i))
         execute_file_name = BENCH_NAME + param
         start_time = time.time()
         os.system(execute_file_name)
