@@ -51,7 +51,7 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     param_series["ZBD_ABSTRACT_TYPE"] = 1
     param_series["RAID_LEVEL"] = 1
 
-    param_list = [param_series for _ in range(5)]
+    param_list = [param_series for _ in range(len(throughput_list))]
     param_list = history_param + param_list
     param_throughput = []
     print("param list : {}".format(param_list))
@@ -104,3 +104,11 @@ execute_adjust_param(2)
 # b = [3,4,5]
 # for k, v in zip(a, b):
 #     print(k, v)
+# l = [s1,s2,s3]
+# index = [1,2]
+# test = []
+# for k, v in zip(l,index):
+#     k["d"]=v
+#     print(k)
+#     test.append(k)
+# print(test)
