@@ -51,11 +51,12 @@ def select_param(history_data, n):
     if len(history_data) <= 0:
         return []
     if len(history_data[0]) < n:
-        n=len(history_data[0])-1
+        n = len(history_data[0])-1
     index_name = [index for index in history_data[0].keys()]
     selected_param = [] # 已选参数名
     un_selected_param = [i for i in range(len(history_data[0])-1)] # 去除target 未选参数下标索引
 
+    print("select {} params".format(n))
     # 根据参数个数停止参数选择
     while len(selected_param) <= n:
         # 长度为0 选择第一个影响力最大参数

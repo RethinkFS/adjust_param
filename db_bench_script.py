@@ -31,6 +31,7 @@ prometheus = Prometheus(PROMETHEUS_IP)
 def collect_range_param_and_throughput(start_time, end_time, step):
     # collect history data
     throughput_list = prometheus.get_range_write_throughput(start_time, end_time, step)
+    print("data from prometheus : \n {}".format(throughput_list))
     # collect corresponding params
     is_adjust, datas = history_data()
     # prepare target list
@@ -48,6 +49,7 @@ def collect_range_param_and_throughput(start_time, end_time, step):
 
     param_list = [param_series for _ in range(5)]
     param_list = history_param + param_list
+    print("param_list : \n{}".format(param_list))
     param_throughput = []
     for s, v in zip(param_list, throughput_list):
         s["TARGET"] = v
@@ -74,6 +76,7 @@ def execute_adjust_param(n):
         step = (end_time - start_time) / 5
         param_throughput = collect_range_param_and_throughput(start_time, end_time, step)
         recommend = adjust(param_throughput, 2)
+        print("recommend params : {}".format(recommend))
         recommend = recommend[:-1]
         param = ""
         for i in range(3):
