@@ -54,6 +54,8 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     param_list = [param_series for _ in range(5)]
     param_list = history_param + param_list
     param_throughput = []
+    print("len of param_list : {}".format(len(param_list)))
+    print("len of throughput : {}".format(len(throughput_list)))
     for s, v in zip(param_list, throughput_list):
         s["TARGET"] = v
         param_throughput.append(s)
