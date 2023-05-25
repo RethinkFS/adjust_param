@@ -6,8 +6,8 @@ import time
 from aquire_history_data import history_data, CONTINUOUS_PARAM
 from adjust_param import adjust
 
-BENCH_NAME = "./db_bench"
-ACQUIRE_CONFIG = "./defconfig"
+BENCH_NAME = "../build/db_bench"
+ACQUIRE_CONFIG = "../build/plugin/aquafs/defconfig"
 PARAM_LIST = pd.Series()
 class Prometheus():
     def __init__(self, ip):
