@@ -1,7 +1,6 @@
 # adjust params system
 from aquire_history_data import history_data
 from select_param import select_param
-from adjust import adjust_continuous_param
 from gauss_regression import gauss
 
 

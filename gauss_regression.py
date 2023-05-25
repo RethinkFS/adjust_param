@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from aquire_history_data import CONTINUOUS_PARAM, DISCRETE_PARAM, CONTINUOUS_PARAM_RANGE, DISCRETE_PARAM_RANGE
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
