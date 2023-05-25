@@ -23,6 +23,8 @@ class Prometheus():
         target = []
         # for throughput in res.get("data").get("result")[3]:
         #     target.append(throughput.get("values"))
+        print(res.get("data").get("result"))
+        print(res.get("data").get("result")[3])
         for throughput in res.get("data").get("result")[3].get("values"):
             target.append(throughput[1])
         return target
