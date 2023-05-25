@@ -8,7 +8,6 @@ from adjust_param import adjust
 
 BENCH_NAME = "../build/db_bench"
 ACQUIRE_CONFIG = "../build/plugin/aquafs/defconfig"
-PARAM_LIST = pd.Series()
 class Prometheus():
     def __init__(self, ip):
         self.server_ip = ip
@@ -53,6 +52,9 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     for s, v in zip(param_list, throughput_list):
         s["TARGET"]=v
         param_throughput.append(s)
+    # add new params and throughput to history_data.csv
+    record_data = pd.DataFrame(param_throughput)
+    record_data.to_csv("history_data.csv", index=False)
     # return params and throughput
     return param_throughput
 
@@ -77,4 +79,10 @@ def execute_adjust_param(n):
         for i in range(3):
             param = param + " " + list(recommend.index)[i] + "=" + str(recommend[i])+" "
 
-execute_adjust_param(2)
+# execute_adjust_param(2)
+# s1 = pd.Series([1,2,3], index=['a','b','c'])
+# s2 = pd.Series([11,22,33], index=['a','b','c'])
+# s3 = pd.Series([111,222,333], index=['a','b','c'])
+# df = pd.DataFrame([s1, s2])
+# print(df)
+# df.to_csv('test', index=False)
