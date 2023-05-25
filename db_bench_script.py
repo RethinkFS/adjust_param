@@ -46,7 +46,7 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     param_series["ZBD_ABSTRACT_TYPE"] = 1
     param_series["RAID_LEVEL"] = 1
 
-    n = (end_time - start_time) / step
+    n = (end_time - start_time) // step
     param_list = [param_series for _ in range(n)]
     param_list = history_param + param_list
     param_throughput = []
