@@ -86,3 +86,4 @@ def execute_adjust_param(n):
 # df = pd.DataFrame([s1, s2])
 # print(df)
 # df.to_csv('test', index=False)
+execute_adjust_param(2)
