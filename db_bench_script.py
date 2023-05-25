@@ -37,7 +37,8 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     throughput_list = [data[-1] for data in datas] + throughput_list
     # prepare param
     history_param = [data[:-1] for data in datas]
-    param_dict = json.loads(os.popen(ACQUIRE_CONFIG))
+    print(os.popen(ACQUIRE_CONFIG).readlines())
+    param_dict = json.loads(os.popen(ACQUIRE_CONFIG).readlines())
     param_series = pd.Series(param_dict)
 
     # default param
