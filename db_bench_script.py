@@ -38,6 +38,7 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     print("data from prometheus : \n {}".format(throughput_list))
     # collect corresponding params
     is_adjust, datas = history_data()
+    print("history_data : {}".format(datas))
     # prepare target list
     throughput_list = [data[-1] for data in datas] + throughput_list
     print("throughput list : {}".format(throughput_list))
