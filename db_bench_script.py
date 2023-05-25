@@ -71,7 +71,7 @@ def execute_adjust_param(n):
         return False, []
     # loop n times, get recommend params and then run the next params
     param = " --fs_uri=aquafs://raida:dev:nullb0,dev:nullb1" \
-            " --benchmarks=fillrandom --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
+            " --benchmarks=fillseq --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
     for i in range(n):
         # collect throughput and corresponding parameters
         print("The {}-th adjust".format(i))
@@ -85,7 +85,7 @@ def execute_adjust_param(n):
         print("recommend params : {}".format(recommend))
         recommend = recommend[:-1]
         param = " --fs_uri=aquafs://raida:dev:nullb0,dev:nullb1 " \
-                "--benchmarks=fillrandom --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
+                "--benchmarks=fillseq --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
         for i in range(3):
             param = param + " " + list(recommend.index)[i] + "=" + str(recommend[i])+" "
 
