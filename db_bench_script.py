@@ -26,7 +26,7 @@ class Prometheus():
         print(res.get("data").get("result"))
         print(res.get("data").get("result")[3])
         for throughput in res.get("data").get("result")[3].get("values"):
-            target.append(throughput[1])
+            target.append(int(throughput[1]))
         return target
 
 PROMETHEUS_IP = "http://localhost:9090"
