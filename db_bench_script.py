@@ -17,12 +17,14 @@ class Prometheus():
     def get_range_write_throughput(self, start_time, end_time, step):
         expr = "aquafs_write_throughput&start=%s&end=%s&step=%s" % (start_time, end_time, step)
         url = self.pre_url_range + expr
-        print("collecting all write throughput results: visiting "+url)
+        print("collecting all write throughput results: visiting \n"+url)
         # collect data through prometheus
         res = json.loads(requests.post(url=url).content.decode('utf8', 'ignore'))
         target = []
-        for throughput in res.get("data").get("result"):
-            target.append(throughput)
+        # for throughput in res.get("data").get("result")[3]:
+        #     target.append(throughput.get("values"))
+        for throughput in res.get("data").get("result")[3].get("values"):
+            target.append(throughput[1])
         return target
 
 PROMETHEUS_IP = "http://localhost:9090"

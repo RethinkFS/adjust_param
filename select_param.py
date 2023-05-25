@@ -58,7 +58,7 @@ def select_param(history_data, n):
 
     print("select {} params".format(n))
     # 根据参数个数停止参数选择
-    while len(selected_param) <= n:
+    while len(selected_param) < n:
         # 长度为0 选择第一个影响力最大参数
         if len(selected_param) == 0:
             target_data = [history_data[i][-1] for i in range(len(history_data))] # 目标数据
