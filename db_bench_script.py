@@ -70,8 +70,8 @@ def execute_adjust_param(n):
         print("Do not exist db_bench")
         return False, []
     # loop n times, get recommend params and then run the next params
-    param = "sudo ./db_bench --fs_uri=aquafs://raida:dev:nullb0,dev:nullb1 \
-    --benchmarks=fillrandom --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
+    param = "sudo ./db_bench --fs_uri=aquafs://raida:dev:nullb0,dev:nullb1" \
+            " --benchmarks=fillrandom --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
     for i in range(n):
         # collect throughput and corresponding parameters
         execute_file_name = BENCH_NAME + param
@@ -83,8 +83,8 @@ def execute_adjust_param(n):
         recommend = adjust(param_throughput, 2)
         print("recommend params : {}".format(recommend))
         recommend = recommend[:-1]
-        param = "sudo ./db_bench --fs_uri=aquafs://raida:dev:nullb0,dev:nullb1 \
-    --benchmarks=fillrandom --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
+        param = "sudo ./db_bench --fs_uri=aquafs://raida:dev:nullb0,dev:nullb1 " \
+                "--benchmarks=fillrandom --use_direct_io_for_flush_and_compaction --use_stderr_info_logger"
         for i in range(3):
             param = param + " " + list(recommend.index)[i] + "=" + str(recommend[i])+" "
 
