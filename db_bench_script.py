@@ -46,12 +46,11 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     param_series["ZBD_ABSTRACT_TYPE"] = 1
     param_series["RAID_LEVEL"] = 1
 
-    n = (end_time - start_time) // step
-    param_list = [param_series for _ in range(n)]
+    param_list = [param_series for _ in range(5)]
     param_list = history_param + param_list
     param_throughput = []
     for s, v in zip(param_list, throughput_list):
-        s["TARGET"]=v
+        s["TARGET"] = v
         param_throughput.append(s)
     # add new params and throughput to history_data.csv
     record_data = pd.DataFrame(param_throughput)
