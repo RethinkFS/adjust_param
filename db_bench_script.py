@@ -35,16 +35,13 @@ prometheus = Prometheus(PROMETHEUS_IP)
 def collect_range_param_and_throughput(start_time, end_time, step):
     # collect history data
     throughput_list = prometheus.get_range_write_throughput(start_time, end_time, step)
-    print("data from prometheus : \n {}".format(throughput_list))
     # collect corresponding params
     is_adjust, datas = history_data()
-    print("history_data : {}".format(datas))
     # prepare target list
     throughput_list = [data[-1] for data in datas] + throughput_list
     print("throughput list : {}".format(throughput_list))
     # prepare param
     history_param = [data[:-1] for data in datas]
-    print("history_param : {}".format(history_param))
     print(os.popen(ACQUIRE_CONFIG).readlines())
     param_dict = json.loads(os.popen(ACQUIRE_CONFIG).readlines()[0])
     param_series = pd.Series(param_dict)
@@ -56,7 +53,6 @@ def collect_range_param_and_throughput(start_time, end_time, step):
 
     param_list = [param_series for _ in range(5)]
     param_list = history_param + param_list
-    print("param_list : \n{}".format(param_list))
     param_throughput = []
     for s, v in zip(param_list, throughput_list):
         s["TARGET"] = v
@@ -65,6 +61,7 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     record_data = pd.DataFrame(param_throughput)
     record_data.to_csv("history_data.csv", index=False)
     # return params and throughput
+    print("param_throughput : {}".format(param_throughput))
     return param_throughput
 
 def execute_adjust_param(n):
