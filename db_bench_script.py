@@ -37,6 +37,7 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     throughput_list = prometheus.get_range_write_throughput(start_time, end_time, step)
     # collect corresponding params
     is_adjust, datas = history_data()
+    new_data_num = len(throughput_list)
     # prepare target list
     throughput_list = [data[-1] for data in datas] + throughput_list
     print("throughput list : {}".format(throughput_list))
@@ -51,7 +52,7 @@ def collect_range_param_and_throughput(start_time, end_time, step):
     param_series["ZBD_ABSTRACT_TYPE"] = 1
     param_series["RAID_LEVEL"] = 1
 
-    param_list = [param_series for _ in range(len(throughput_list))]
+    param_list = [param_series for _ in range(new_data_num)]
     param_list = history_param + param_list
     param_throughput = []
     print("param list : {}".format(param_list))
@@ -92,10 +93,10 @@ def execute_adjust_param(n):
         for i in range(3):
             param = param + " " + list(recommend.index)[i] + "=" + str(recommend[i])+" "
 
-execute_adjust_param(2)
-# s1 = pd.Series([1,2,3], index=['a','b','c'])
-# s2 = pd.Series([11,22,33], index=['a','b','c'])
-# s3 = pd.Series([111,222,333], index=['a','b','c'])
+# execute_adjust_param(2)
+s1 = pd.Series([1,2,3], index=['a','b','c'])
+s2 = pd.Series([11,22,33], index=['a','b','c'])
+s3 = pd.Series([111,222,333], index=['a','b','c'])
 # df = pd.DataFrame([s1, s2])
 # print(df)
 # df.to_csv('test', index=False)
@@ -104,11 +105,11 @@ execute_adjust_param(2)
 # b = [3,4,5]
 # for k, v in zip(a, b):
 #     print(k, v)
-# l = [s1,s2,s3]
-# index = [1,2]
-# test = []
-# for k, v in zip(l,index):
-#     k["d"]=v
-#     print(k)
-#     test.append(k)
-# print(test)
+l = [s1,s2,s3]
+index = [1,2]
+test = []
+for k, v in zip(l,index):
+    k["d"]=v
+    print(k)
+    test.append(k)
+print(test)
