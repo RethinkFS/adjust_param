@@ -1,7 +1,9 @@
 import numpy as np
+import bisect
 from aquire_history_data import CONTINUOUS_PARAM, DISCRETE_PARAM, CONTINUOUS_PARAM_RANGE, DISCRETE_PARAM_RANGE
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
+from var_blk_size import SECT_SIZE, ZONE_SIZE
 
 class gauss:
     def __init__(self, data, param):
@@ -9,16 +11,16 @@ class gauss:
         self.params = param
         self.param_data_array = np.array([data_series[param].tolist() for data_series in data])
         self.target = np.array([target[-1] for target in data])
-        print(self.param_data_array)
-        print(self.target)
+        # print(self.param_data_array)
+        # print(self.target)
 
     def train_model(self):
         # 核函数
         kernel = C(0.1, (0.001, 0.1)) * RBF(0.5, (1e-4, 10))
         # 高斯模型
         self.reg = GaussianProcessRegressor(kernel=kernel, n_restarts_optimizer=10, alpha=0.1)
-        print(self.param_data_array)
-        print(self.target)
+        # print(self.param_data_array)
+        # print(self.target)
         # 训练模型
         self.reg.fit(self.param_data_array, self.target)
 
@@ -33,17 +35,37 @@ class gauss:
         res = recommend_param
         # 调参顺序按照选择参数的重要性进行调参
         for param in self.params:
+            variable_range = []
             # 离散参数尝试遍历值
             if param in DISCRETE_PARAM:
                 variable_range = DISCRETE_PARAM_RANGE[param]
                 variable_range = [value.value for value in variable_range]
             # 连续参数尝试按照比例遍历范围
-            else:
+            elif param in CONTINUOUS_PARAM:
                 min_v, max_v = CONTINUOUS_PARAM_RANGE[param]["min"], CONTINUOUS_PARAM_RANGE[param]["max"]
                 interval = (max_v-min_v) * 0.05
                 now_v = recommend_param[param]
                 variable_range = [(now_v + i * interval) for i in range(-10, 11) if i != 0]
                 variable_range = [num for num in variable_range if num >= min_v and num <= max_v]
+            # 属于块参数 选择与预测值最接近的值
+            else:
+                sz = recommend_param[param]
+                if param == "sect_size":
+                    position = bisect.bisect(SECT_SIZE, sz)
+                    if position == len(SECT_SIZE):
+                        position = len(SECT_SIZE)-1
+                    elif position == -1:
+                        position = 0
+                    recommend_param[param] = SECT_SIZE[position]
+                elif param == "zone_size":
+                    position = bisect.bisect(ZONE_SIZE, sz)
+                    if position == len(ZONE_SIZE):
+                        position = len(ZONE_SIZE)-1
+                    elif position == -1:
+                        position = 0
+                    recommend_param[param] = ZONE_SIZE[position]
+                else:
+                    print("error in block param!")
             # 调整参数
             for value in variable_range:
                 if max_param[param] == value:

@@ -6,7 +6,7 @@ from gauss_regression import gauss
 
 def adjust(data, n):
     all_param, continuous_param, discrete_param = select_param(data, n)
-    print(all_param, continuous_param, discrete_param, sep='\n')
+    # print(all_param, continuous_param, discrete_param, sep='\n')
     # gauss_regression
     gauss_regress = gauss(data, all_param)
     return gauss_regress.recommend()

@@ -21,9 +21,9 @@ DISCRETE_PARAM={
 
 # continuous_param range
 CONTINUOUS_PARAM_RANGE= {
-    "gc_start_level": {"min": 0, "max": 0},
-    "gc_slope": {"min": 0, "max": 0},
-    "gc_sleep_time": {"min": 0, "max": 0},
+    "gc_start_level": {"min": 0, "max": 100},
+    "gc_slope": {"min": 0, "max": 5},
+    "gc_sleep_time": {"min": 0, "max": 100},
     "finish_threshold_": {"min": 0, "max": 0},
 }
 

@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 from aquire_history_data import CONTINUOUS_PARAM, DISCRETE_PARAM
-MAX_INT=(1<<8)-1
+from var_blk_size import SECT_SIZE, ZONE_SIZE
+MAX_INT=(1<<64)-1
 # 求一个target方差
 def Var(data):
     return np.var(data)
@@ -9,9 +10,9 @@ def Var(data):
 # 第一次还未选择参数时选出最重要第一位参数
 def PI(data_set,un_selected_param):
     # 通过单个数据项的离散值划分数据集合
-    select_id = -1
+    select_id = 0
     min_param_var = MAX_INT
-    for i in range(len(un_selected_param)):
+    for i in range(len(un_selected_param)-1):# 目标指标不作为参数调整
         param_set = dict()  # 字典的键是数值 value是数据下标索引
         for j, data in enumerate(data_set):
             if data[i] not in param_set.keys():
@@ -23,36 +24,45 @@ def PI(data_set,un_selected_param):
         # print(param_set)
         for k, v in param_set.items():
             param_total_var += len(v) / len(data_set) * Var([data_set[v[a]][-1] for a in range(len(v))])
+        # print("{}-th var: {}".format(i, param_total_var))
         if param_total_var < min_param_var:
             min_param_var = param_total_var
             select_id = i
-    return select_id, param_total_var
+    return select_id, min_param_var
 
 # 将每个参数的条件集合方差作为列表返回
 def CPI(data_set, un_selected_param):
     # 通过单个数据项的离散值划分数据集合
     result = []
+    var_s = Var([data[-1] for data in data_set])
+    # print("unselected_params : {}".format(un_selected_param))
     for i in range(len(un_selected_param)):
         param_set = dict()  # 字典的键是数值 value是数据下标索引
+        data_index = un_selected_param[i]
         for j, data in enumerate(data_set):
-            if data[i] not in param_set.keys():
-                param_set[data[i]] = [j]
+            if data[data_index] not in param_set.keys():
+                param_set[data[data_index]] = [j]
             else:
-                param_set[data[i]].append(j)
+                param_set[data[data_index]].append(j)
         # 求PI系数
         param_total_var = 0.0
         for k, v in param_set.items():
+            # print("{}-th param_list : {}".format(i, v))
+            # print([data_set[v[a]][-1] for a in range(len(v))])
             param_total_var += len(v) / len(data_set) * Var([data_set[v[a]][-1] for a in range(len(v))])
-        result.append(param_total_var)
+        # print("{}-th cpi: {}".format(data_index, var_s - param_total_var))
+        result.append(var_s - param_total_var)
     return result
 
 # select n most important parameters
 def select_param(history_data, n):
     if len(history_data) <= 0:
         return []
-    if len(history_data[0]) < n:
+    if len(history_data[0])-1 < n:
         n = len(history_data[0])-1
     index_name = [index for index in history_data[0].keys()]
+    index_name.pop() # 删除目标指标名字
+    print(index_name)
     selected_param = [] # 已选参数名
     un_selected_param = [i for i in range(len(history_data[0])-1)] # 去除target 未选参数下标索引
 
@@ -77,14 +87,18 @@ def select_param(history_data, n):
                     param_set[selected_param_list] = [i]
                 else:
                     param_set[selected_param_list].append(i)
+            print("param_set:{}", param_set)
             # 固定集合 在未选择的参数中选择CPI系数最大的参数
             # 每个参数的CPI系数由所有划分集合中的最大CPI系数决定
             result = [-1 for _ in range(len(un_selected_param))]
             for _, data_set_index in param_set.items():
                 data_set = [history_data[i] for i in data_set_index]
+                # print("data_set_index : {}".format(data_set_index))
+                # print("data_set: {}".format(data_set))
                 cpi = CPI(data_set, un_selected_param)
                 num = len(result)
                 result = [result[i] if result[i] > cpi[i] else cpi[i] for i in range(num)]
+            print("result:",result)
             max_cpi = max(result)
             selected_param_index = result.index(max_cpi)
             select_id = un_selected_param[selected_param_index]
